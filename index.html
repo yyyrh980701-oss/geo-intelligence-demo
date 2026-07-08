@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>财关助手 · 让 AI 在答案里记住你的品牌</title>
+<meta name="description" content="财关助手用 EEAT 四维框架追踪并提升品牌在 Perplexity、ChatGPT、SearchGPT、Gemini 的可见度,把品牌公关从堆人力变成跑流程,为企业降本增效。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;
+  --bg-soft:#f5f5f7;     /* 苹果经典浅灰 */
+  --bg-soft-2:#fafafc;
+  --ink:#1d1d1f;          /* 主文字近黑 */
+  --ink-2:#6e6e73;        /* 次文字灰 */
+  --ink-3:#86868b;        /* 弱文字 */
+  --line:#e8e8ed;
+  --accent:#0071e3;       /* 苹果蓝 唯一强调色 */
+  --accent-soft:#e8f1fd;
+  --green:#1a7f4b;
+  --amber:#b25e09;
+  --red:#c0362c;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:'Inter','Noto Sans SC',-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
+  line-height:1.5;font-weight:400;letter-spacing:-.01em;
+}
+::selection{background:var(--accent);color:#fff}
+.wrap{max-width:1024px;margin:0 auto;padding:0 32px}
+.wrap-narrow{max-width:720px;margin:0 auto;padding:0 32px}
+a{color:inherit;text-decoration:none}
+
+/* ---------- 顶栏 ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;
+  background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid rgba(0,0,0,0);transition:border-color .3s}
+header.scrolled{border-bottom-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:52px;max-width:1024px;margin:0 auto;padding:0 32px}
+.brand{font-weight:600;font-size:18px;letter-spacing:-.02em}
+.nav-links{display:flex;gap:34px;align-items:center}
+.nav-links a{font-size:13px;color:var(--ink);opacity:.82;transition:opacity .2s;font-weight:400}
+.nav-links a:hover{opacity:1}
+.nav-right{display:flex;align-items:center;gap:18px}
+.lang{font-size:12px;color:var(--ink-2);cursor:pointer;background:none;border:none;font-family:inherit;letter-spacing:0}
+.lang:hover{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;
+  border:none;font-family:inherit;transition:.22s;font-weight:400;letter-spacing:-.01em}
+.btn-primary{background:var(--accent);color:#fff;padding:8px 17px;font-size:14px;border-radius:980px}
+.btn-primary:hover{background:#0077ed}
+.btn-primary.lg{padding:13px 26px;font-size:17px}
+.btn-text{color:var(--accent);font-size:14px;background:none;padding:0}
+.btn-text:hover{text-decoration:underline}
+.btn-text.lg{font-size:17px}
+.nav-mini{font-size:13px;background:var(--accent);color:#fff;padding:5px 13px;border-radius:980px}
+.nav-mini:hover{background:#0077ed}
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;color:var(--ink)}
+
+/* ---------- 通用 section 节奏 ---------- */
+section{padding:110px 0}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 64px}
+.eyebrow{font-size:19px;color:var(--accent);font-weight:600;letter-spacing:-.01em;margin-bottom:6px}
+h1,h2,h3{font-weight:600;letter-spacing:-.022em;line-height:1.07}
+h2{font-size:clamp(32px,5vw,48px);margin-bottom:18px}
+.sec-head p{font-size:clamp(18px,2.4vw,21px);color:var(--ink-2);font-weight:400;line-height:1.45;letter-spacing:-.01em}
+
+/* ---------- Hero ---------- */
+.hero{padding:150px 0 100px;text-align:center}
+.hero h1{font-size:clamp(40px,7vw,80px);font-weight:600;line-height:1.18;margin-bottom:24px}
+.hero h1 .grad{background:linear-gradient(120deg,#0071e3,#42a5f5 60%,#6f5bd6);-webkit-background-clip:text;background-clip:text;color:transparent;
+  display:inline-block;line-height:1.18;padding:.04em 0;transition:opacity .25s}
+.hero .sub{font-size:clamp(19px,2.7vw,26px);color:var(--ink-2);font-weight:400;max-width:660px;margin:0 auto 16px;line-height:1.4;letter-spacing:-.01em}
+.hero-cta{display:flex;gap:26px;justify-content:center;align-items:center;margin-top:34px;flex-wrap:wrap}
+.hero-note{margin-top:18px;font-size:13px;color:var(--ink-3)}
+
+/* hero 仪表盘预览 */
+.hero-visual{margin:72px auto 0;max-width:880px;background:var(--bg-soft);border-radius:24px;
+  padding:34px;box-shadow:0 30px 70px -40px rgba(0,0,0,.25)}
+.feature-visual.hero-visual{margin:0;max-width:none}
+.hv-top{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:30px}
+.hv-top .t{font-size:14px;color:var(--ink-3)}
+.hv-top .live{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--green)}
+.hv-top .live i{width:7px;height:7px;border-radius:50%;background:var(--green);display:block}
+.hv-cols{display:flex;flex-direction:column;align-items:center;gap:34px}
+.eeat-list{display:flex;flex-direction:column;gap:16px;width:100%;max-width:440px}
+.eeat-item .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.eeat-item .lab{font-size:14px;color:var(--ink);font-weight:500}
+.eeat-item .lab small{color:var(--ink-3);font-weight:400;margin-left:6px}
+.eeat-item .val{font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;font-weight:500}
+.eeat-item .bar{height:6px;background:#e0e0e6;border-radius:6px;overflow:hidden}
+.eeat-item .bar span{display:block;height:100%;background:var(--accent);border-radius:6px;width:0;transition:width 1.3s cubic-bezier(.2,.8,.2,1)}
+.eeat-judgment{max-width:560px;margin:28px auto 0;padding-top:22px;border-top:1px solid var(--line);
+  font-size:14.5px;color:var(--ink-2);line-height:1.55;text-align:left}
+.eeat-judgment b{color:var(--ink);font-weight:600}
+
+/* ---------- 引擎 ---------- */
+.engines{padding:90px 0;background:var(--bg-soft);text-align:center}
+.engines h2{font-size:clamp(26px,3.6vw,36px);margin-bottom:42px}
+.engine-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}
+.chip{background:#fff;padding:12px 22px;border-radius:980px;font-size:15px;color:var(--ink);
+  box-shadow:0 1px 3px rgba(0,0,0,.05);display:inline-flex;align-items:center;gap:9px}
+.chip i{width:8px;height:8px;border-radius:50%;display:block}
+
+/* ---------- 降本增效 ---------- */
+.value{background:var(--bg)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;margin-bottom:72px}
+.metric{text-align:center}
+.metric .num{font-size:clamp(46px,6vw,68px);font-weight:600;letter-spacing:-.03em;line-height:1;
+  background:linear-gradient(120deg,#0071e3,#6f5bd6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.metric .lab{font-size:16px;color:var(--ink-2);margin-top:12px;line-height:1.4}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:0 auto}
+.compare-card{border-radius:var(--radius);padding:34px}
+.compare-card.before{background:var(--bg-soft)}
+.compare-card.after{background:linear-gradient(160deg,#eef5ff,#f3edff)}
+.compare-card .tag{font-size:13px;font-weight:600;letter-spacing:.02em;margin-bottom:20px;display:inline-block}
+.compare-card.before .tag{color:var(--ink-3)}
+.compare-card.after .tag{color:var(--accent)}
+.compare-card ul{list-style:none;display:flex;flex-direction:column;gap:16px}
+.compare-card li{display:flex;gap:12px;font-size:15.5px;line-height:1.45}
+.compare-card li .ic{flex-shrink:0;margin-top:2px;font-size:15px}
+.compare-card.before li{color:var(--ink-2)}
+.compare-card.before li .ic{color:var(--ink-3)}
+.compare-card.after li{color:var(--ink)}
+.compare-card.after li .ic{color:var(--accent)}
+
+/* ---------- 功能模块(交替) ---------- */
+.features{background:var(--bg)}
+.feat{display:flex;flex-direction:column;gap:30px;margin-bottom:96px}
+.feat:last-child{margin-bottom:0}
+.feat-text{max-width:760px}
+.feat-num{font-size:14px;color:var(--accent);font-weight:600;margin-bottom:14px}
+.feat-text h3{font-size:clamp(26px,3.4vw,34px);margin-bottom:16px;line-height:1.12}
+.feat-text p{font-size:17.5px;color:var(--ink-2);line-height:1.5;margin-bottom:22px;letter-spacing:-.01em}
+.feat-list{list-style:none;display:flex;flex-wrap:wrap;gap:13px 32px}
+.feat-list li{display:flex;gap:11px;font-size:15.5px;color:var(--ink);align-items:flex-start}
+.feat-list li .ic{color:var(--accent);flex-shrink:0;margin-top:3px}
+
+/* mock 卡 */
+.mock{background:#fff;border-radius:20px;padding:30px;box-shadow:0 20px 50px -30px rgba(0,0,0,.22)}
+.mock-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.mock-h .ttl{font-size:15px;font-weight:600}
+.mock-h .tag{font-size:12px;color:var(--ink-3)}
+/* 横向铺开容器 */
+.mock-row{display:grid;gap:30px;align-items:center}
+.mock-row.eeat{grid-template-columns:1.3fr 1px 1fr}
+.mock-row.alerts{grid-template-columns:repeat(3,1fr)}
+.mock-row.kol{grid-template-columns:auto 1fr}
+.mock-row.hv{grid-template-columns:1fr 1px 1.1fr}
+.mock-vline{width:1px;align-self:stretch;background:var(--line)}
+.mock-conclusion{font-size:14px;color:var(--ink-2);line-height:1.6}
+
+/* EEAT radar mock */
+.radar-wrap{display:flex;flex-direction:column;align-items:center;gap:20px}
+.score-ring{position:relative;width:120px;height:120px}
+.score-ring .v{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-ring .v b{font-size:30px;font-weight:600;letter-spacing:-.02em}
+.score-ring .v small{font-size:11px;color:var(--ink-3)}
+.eeat-mini{width:100%;display:flex;flex-direction:column;gap:11px}
+.eeat-mini .row{display:flex;align-items:center;gap:12px;font-size:13.5px}
+.eeat-mini .row .k{width:96px;color:var(--ink-2)}
+.eeat-mini .row .b{flex:1;height:5px;background:#ececf1;border-radius:5px;overflow:hidden}
+.eeat-mini .row .b i{display:block;height:100%;background:var(--accent);border-radius:5px}
+.eeat-mini .row .n{width:26px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+
+/* 告警 mock — 竖向块,三列横排 */
+.alert{display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:14px;background:var(--bg-soft);margin-bottom:0;align-items:flex-start;height:100%}
+.alert .sev{font-size:11px;font-weight:600;padding:3px 9px;border-radius:7px;flex-shrink:0}
+.sev.c{background:#fbe9e7;color:var(--red)}
+.sev.w{background:#fdf0e0;color:var(--amber)}
+.sev.o{background:#e6f4ec;color:var(--green)}
+.alert .body .msg{font-size:14px;margin-bottom:6px;line-height:1.45;font-weight:500}
+.alert .body .meta{font-size:12px;color:var(--ink-3);line-height:1.4}
+
+/* KOL mock */
+.kol-tier{display:flex;flex-direction:column;gap:8px;min-width:88px}
+.kol-tier button{text-align:center;font-size:12.5px;padding:9px 8px;border-radius:10px;background:var(--bg-soft);color:var(--ink-2);
+  border:0;font:inherit;cursor:pointer;transition:.2s}
+.kol-tier button.act,.kol-tier button:hover{background:var(--accent);color:#fff}
+.kol-list{display:flex;flex-direction:column;min-height:184px}
+.kol-panel{display:none;flex-direction:column}
+.kol-panel.act{display:flex}
+.kol-item{display:flex;align-items:center;gap:13px;padding:12px 0;border-bottom:1px solid var(--line)}
+.kol-item:last-child{border:none}
+.kol-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#0071e3,#6f5bd6);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0}
+.kol-item .info{flex:1}
+.kol-item .nm{font-size:14.5px;font-weight:500}
+.kol-item .mt{font-size:12px;color:var(--ink-3)}
+.kol-item .er{font-size:13px;color:var(--accent);font-weight:500;font-variant-numeric:tabular-nums}
+
+/* 横纵 mock */
+.hvplot{position:relative;height:220px;margin:8px 20px 30px;min-width:280px}
+.hvplot .ax{position:absolute;background:var(--line)}
+.hvplot .ax.y{left:0;top:0;bottom:0;width:1.5px}
+.hvplot .ax.x{left:0;right:0;bottom:0;height:1.5px}
+.hvplot .lab{position:absolute;font-size:11px;color:var(--ink-3)}
+.hvplot .lab.y{top:-4px;left:8px}
+.hvplot .lab.x{bottom:6px;right:0}
+.node{position:absolute;width:14px;height:14px;border-radius:50%;transform:translate(-50%,50%)}
+.node .l{position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;color:var(--ink-2)}
+.node.you{background:var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}
+.node.a{background:#6f5bd6}.node.b{background:var(--amber)}.node.c{background:var(--ink-3)}
+
+/* ---------- X 接入 ---------- */
+.xaccess{background:var(--bg-soft)}
+.x-grid{display:flex;justify-content:center;gap:24px}
+.x-card{background:#fff;border-radius:var(--radius);padding:34px;transition:.25s;width:100%;max-width:560px}
+.x-card:hover{transform:translateY(-3px);box-shadow:0 24px 50px -34px rgba(0,0,0,.28)}
+.x-card .badge{font-size:12.5px;font-weight:600;margin-bottom:16px;display:inline-block}
+.x-card.api .badge{color:var(--green)}
+.x-card.login .badge{color:var(--amber)}
+.x-card h3{font-size:22px;margin-bottom:12px}
+.x-card p{font-size:15px;color:var(--ink-2);line-height:1.5;margin-bottom:20px}
+.x-field{background:#fff;border-radius:11px;padding:12px 15px;font-size:13px;color:var(--ink-3);
+  margin-bottom:9px;display:flex;justify-content:space-between;align-items:center}
+.x-field .lk{color:var(--accent);font-weight:500}
+.x-pros{list-style:none;display:flex;flex-direction:column;gap:9px;margin-top:6px}
+.x-pros li{display:flex;gap:9px;font-size:13.5px;color:var(--ink-2);align-items:flex-start}
+.x-pros li .i{flex-shrink:0;margin-top:2px}
+.x-pros li .i.g{color:var(--green)}.x-pros li .i.a{color:var(--amber)}
+.x-note{text-align:center;font-size:13px;color:var(--ink-3);margin-top:30px;display:flex;gap:8px;justify-content:center;align-items:center}
+
+/* ---------- 工作流 ---------- */
+.flow{background:var(--bg-soft)}
+.flow-steps{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+.fs{display:flex;gap:22px;align-items:flex-start;position:relative;padding-bottom:34px}
+.fs:not(:last-child)::before{content:'';position:absolute;left:17px;top:40px;bottom:0;width:1.5px;background:var(--line)}
+.fs .idx{width:36px;height:36px;border-radius:50%;background:#fff;border:1.5px solid var(--accent);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;flex-shrink:0;z-index:1}
+.fs .c h4{font-size:17px;font-weight:600;margin-bottom:5px}
+.fs .c p{font-size:14.5px;color:var(--ink-2);line-height:1.45}
+
+/* ---------- 档位 ---------- */
+#tiers{background:var(--bg)}
+.tiers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:960px;margin:0 auto}
+.tier{background:var(--bg-soft);border-radius:var(--radius);padding:34px 30px;position:relative;transition:.25s}
+.tier:hover{transform:translateY(-4px);box-shadow:0 26px 54px -36px rgba(0,0,0,.3)}
+.tier.hot{background:#fff;box-shadow:0 0 0 2px var(--accent),0 26px 54px -36px rgba(0,113,227,.4)}
+.tier .pop{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;
+  font-size:11.5px;font-weight:600;padding:4px 14px;border-radius:980px}
+.tier-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:6px}
+.tier h3{font-size:21px;margin-bottom:6px}
+.tier-head h3{margin-bottom:0}
+.price-ref{text-align:right;font-size:12.5px;line-height:1.35;color:var(--accent);font-weight:600;white-space:nowrap;padding-top:2px}
+.tier .sub{font-size:14px;color:var(--ink-2);margin-bottom:18px;min-height:40px;line-height:1.4}
+.tier .medium{font-size:13px;color:var(--accent);font-weight:500;padding:16px 0;border-top:1px solid var(--line);margin-bottom:16px}
+.tier ul{list-style:none;display:flex;flex-direction:column;gap:12px}
+.tier li{display:flex;gap:10px;font-size:14.5px;color:var(--ink);align-items:flex-start}
+.tier li .ic{color:var(--accent);flex-shrink:0;margin-top:2px}
+
+/* ---------- FAQ ---------- */
+.faq-list{max-width:720px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;background:none;border:none;font-family:inherit;color:var(--ink);text-align:left;
+  font-size:18px;font-weight:500;padding:24px 0;cursor:pointer;display:flex;justify-content:space-between;
+  align-items:center;gap:18px;letter-spacing:-.01em}
+.faq-q .pm{color:var(--accent);font-size:24px;font-weight:300;transition:transform .25s;flex-shrink:0;line-height:1}
+.faq-item.open .faq-q .pm{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.faq-item.open .faq-a{max-height:320px}
+.faq-a p{padding-bottom:24px;font-size:16px;color:var(--ink-2);line-height:1.55}
+
+/* ---------- CTA ---------- */
+.cta{text-align:center;background:var(--bg)}
+.cta h2{font-size:clamp(32px,5vw,52px);margin-bottom:16px}
+.cta p{font-size:21px;color:var(--ink-2);max-width:520px;margin:0 auto 32px;font-weight:400}
+.cta .hero-cta{margin-top:0}
+
+/* ---------- Footer ---------- */
+footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--ink-3)}
+.foot-top{display:flex;flex-wrap:wrap;gap:28px;justify-content:space-between;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.foot-links{display:flex;gap:26px;flex-wrap:wrap}
+.foot-links a{color:var(--ink-2);font-size:13px}
+.foot-links a:hover{color:var(--ink)}
+.foot-bottom{padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* ---------- 响应式 ---------- */
+@media(max-width:860px){
+  .nav-links{display:none}
+  .menu-toggle{display:block}
+  .hv-cols,.metrics,.compare,.x-grid,.tiers-grid{grid-template-columns:1fr}
+  .feat{gap:24px;margin-bottom:64px}
+  /* mock 横向容器在窄屏改单列堆叠 */
+  .mock-row.eeat,.mock-row.alerts,.mock-row.kol,.mock-row.hv{grid-template-columns:1fr;gap:20px}
+  .mock-vline{display:none}
+  .mock-conclusion{padding-top:18px;border-top:1px solid var(--line)}
+  .kol-tier{flex-direction:row}
+  .kol-tier button{flex:1}
+  .metrics{gap:36px;margin-bottom:54px}
+  section{padding:80px 0}
+  .hero{padding:120px 0 70px}
+}
+@media(max-width:520px){
+  .wrap,.wrap-narrow{padding:0 22px}
+  .hero-cta{flex-direction:column;gap:18px}
+  .mock-row.alerts{grid-template-columns:1fr}
+}
+/* ===== 单行优化覆盖(桌面端尽量不折行)===== */
+@media(min-width:861px){
+  /* 放宽容器,给长句更多横向空间 */
+  .sec-head{max-width:920px}
+  .hero .sub{max-width:860px;font-size:clamp(18px,2vw,22px)}
+  .sec-head p{font-size:clamp(16px,1.7vw,19px);max-width:880px}
+  .wrap-narrow{max-width:860px}
+  .flow-steps{max-width:820px}
+
+  /* 副标题、功能段、卡片描述、FAQ、流程说明:尽量单行 */
+  .hero .sub,
+  .sec-head p,
+  .feat-text p,
+  .x-card p,
+  .fs .c p,
+  .faq-q > span:first-child{
+    white-space:nowrap;
+  }
+  /* flex 列表项:nowrap 作用到内部文字节点 */
+  .compare-card li > span:last-child,
+  .x-pros li > span:last-child,
+  .feat-list li > span:last-child,
+  .tier li > span:last-child{
+    white-space:nowrap;
+  }
+  /* 略缩字号,帮助容纳 */
+  .feat-text p{font-size:16px}
+  .x-card p{font-size:14.5px}
+  .compare-card li{font-size:15px}
+  .feat-list li,.tier li{font-size:15px}
+  .tier .sub{white-space:nowrap;min-height:auto;font-size:13.5px}
+  .faq-q{font-size:17px}
+  /* 指标数字:缩小并单行 */
+  .metric .num{font-size:clamp(36px,4.2vw,52px);white-space:nowrap}
+}
+/* 手机端:一律恢复正常折行,避免溢出 */
+@media(max-width:860px){
+  .hero .sub,.sec-head p,.feat-text p,.x-card p,.fs .c p,
+  .compare-card li,.x-pros li,.feat-list li,.tier li,
+  .tier .sub,.faq-q > span:first-child{white-space:normal}
+}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <nav class="nav">
+    <a href="#" class="brand">财关助手</a>
+    <div class="nav-links">
+      <a href="#value" data-zh="价值" data-en="Value">价值</a>
+      <a href="#features" data-zh="能力" data-en="Features">能力</a>
+      <a href="#xaccess" data-zh="社媒" data-en="Social">社媒</a>
+      <a href="#tiers" data-zh="交付" data-en="Plans">交付</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="nav-right">
+      <button class="lang" id="lang">EN</button>
+      <a class="nav-mini" data-zh="预约演示" data-en="Get a demo">预约演示</a>
+    </div>
+    <button class="menu-toggle" id="mtoggle" aria-label="menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+    </button>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <h1 data-zh-html="让 <span class='grad' id='engineWord'>Perplexity</span><br>在答案里记住你" data-en-html="Make <span class='grad' id='engineWord'>Perplexity</span><br>remember your brand">让 <span class="grad" id="engineWord">Perplexity</span><br>在答案里记住你</h1>
+    <div class="hero-cta">
+      <button class="btn btn-primary lg" data-zh="免费跑一次体检" data-en="Run a free audit">免费跑一次体检</button>
+      <button class="btn btn-text lg" data-zh="看仪表盘演示 ›" data-en="See the dashboard ›">看仪表盘演示 ›</button>
+    </div>
+    <p class="hero-note" data-zh="诊断版报告免费 · 无需绑卡" data-en="Free diagnosis report · no card required">诊断版报告免费 · 无需绑卡</p>
+
+  </div>
+</section>
+
+<!-- 引擎 -->
+<section class="engines">
+  <div class="wrap">
+    <h2 data-zh="AI 在哪里回答,我们就在哪里" data-en="Wherever AI answers, we are there">AI 在哪里回答,我们就在哪里</h2>
+    <div class="engine-row">
+      <span class="chip"><i style="background:#0071e3"></i>Perplexity</span>
+      <span class="chip"><i style="background:#19c37d"></i>ChatGPT</span>
+      <span class="chip"><i style="background:#f0a830"></i>SearchGPT</span>
+      <span class="chip"><i style="background:#6f5bd6"></i>Gemini</span>
+      <span class="chip"><i style="background:#d97757"></i>Claude</span>
+      <span class="chip"><i style="background:#56b6c2"></i>Google AI Overview</span>
+    </div>
+  </div>
+</section>
+
+<!-- 降本增效 -->
+<section class="value" id="value">
+  <div class="sec-head">
+    <div class="eyebrow" data-zh="降本增效" data-en="Do more with less">降本增效</div>
+    <h2 data-zh="一条流程,顶过去一支团队" data-en="One workflow does a team's work">一条流程,顶过去一支团队</h2>
+  </div>
+  <div class="wrap">
+    <div class="metrics">
+      <div class="metric"><div class="num" data-zh="↓80%" data-en="↓80%">↓80%</div><div class="lab" data-zh="单次品牌体检人力投入" data-en="Less labor per brand audit">单次品牌体检人力投入</div></div>
+      <div class="metric"><div class="num" data-zh="数天→数小时" data-en="days→hours">数天→数小时</div><div class="lab" data-zh="从委托到拿到诊断报告" data-en="From request to diagnosis report">从委托到拿到诊断报告</div></div>
+      <div class="metric"><div class="num" data-zh="6 引擎" data-en="6 engines">6 引擎</div><div class="lab" data-zh="全天候巡检,无需轮班盯屏" data-en="Watched round-the-clock, no shifts">全天候巡检,无需轮班盯屏</div></div>
+    </div>
+    <div class="compare">
+      <div class="compare-card before">
+        <span class="tag" data-zh="过去 · 靠人堆" data-en="Before · headcount">过去 · 靠人堆</span>
+        <ul>
+          <li><span class="ic">—</span><span data-zh="人工逐个引擎搜索、截图、做表" data-en="Manually search, screenshot and tabulate each engine">人工逐个引擎搜索、截图、做表</span></li>
+          <li><span class="ic">—</span><span data-zh="舆情靠人轮班盯,负面常常滞后发现" data-en="Crisis caught late, by people on shift watching feeds">舆情靠人轮班盯,负面常常滞后发现</span></li>
+          <li><span class="ic">—</span><span data-zh="竞品深研一份报告耗时数天" data-en="A deep competitive report takes days">竞品深研一份报告耗时数天</span></li>
+          <li><span class="ic">—</span><span data-zh="KOL 名单靠经验拍脑袋" data-en="KOL lists picked by gut feel">KOL 名单靠经验拍脑袋</span></li>
+        </ul>
+      </div>
+      <div class="compare-card after">
+        <span class="tag" data-zh="现在 · 跑流程" data-en="Now · workflow">现在 · 跑流程</span>
+        <ul>
+          <li><span class="ic">✓</span><span data-zh="四引擎占位快照自动生成,一键出仪表盘" data-en="Four-engine snapshot auto-built into one dashboard">四引擎占位快照自动生成,一键出仪表盘</span></li>
+          <li><span class="ic">✓</span><span data-zh="负面分类汇报,生成一键回应" data-en="Classify negative signals and generate one-click responses">负面分类汇报,生成一键回应</span></li>
+          <li><span class="ic">✓</span><span data-zh="横纵分析数小时产出深度 PDF" data-en="H×V analysis ships a deep PDF in hours">横纵分析数小时产出深度 PDF</span></li>
+          <li><span class="ic">✓</span><span data-zh="KOL 按量级与互动率自动分层" data-en="KOL auto-tiered by reach and engagement">KOL 按量级与互动率自动分层</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 工作流 -->
+<section class="flow">
+  <div class="sec-head">
+    <div class="eyebrow" data-zh="一条链路" data-en="One chain">一条链路</div>
+    <h2 data-zh="从一个 URL 开始,跑完全流程" data-en="From one URL to a full run">从一个 URL 开始,跑完全流程</h2>
+  </div>
+  <div class="wrap">
+    <div class="flow-steps">
+      <div class="fs"><div class="idx">1</div><div class="c"><h4 data-zh="URL Intake + 实体审计" data-en="URL intake + entity audit">URL Intake + 实体审计</h4><p data-zh="8 个前置问题确认公司画像,校验 JSON-LD / Wikidata 实体。" data-en="Eight prep questions confirm the profile and verify JSON-LD / Wikidata entities.">8 个前置问题确认公司画像,校验 JSON-LD / Wikidata 实体。</p></div></div>
+      <div class="fs"><div class="idx">2</div><div class="c"><h4 data-zh="GEO/SEO 策略 + EEAT 评估" data-en="GEO/SEO strategy + EEAT scoring">GEO/SEO 策略 + EEAT 评估</h4><p data-zh="四维打分,生成可见度策略包。" data-en="Four-axis scoring produces a visibility strategy pack.">四维打分,生成可见度策略包。</p></div></div>
+      <div class="fs"><div class="idx">3</div><div class="c"><h4 data-zh="竞品横纵分析" data-en="Competitive H×V">竞品横纵分析</h4><p data-zh="产出深度 PDF + LLM Bundle。" data-en="Outputs a deep PDF + LLM bundle.">产出深度 PDF + LLM Bundle。</p></div></div>
+      <div class="fs"><div class="idx">4</div><div class="c"><h4 data-zh="KOL 分层推荐" data-en="Tiered KOL outreach">KOL 分层推荐</h4><p data-zh="按 A / B / C 量级给出候选名单。" data-en="Candidate list by tier A / B / C.">按 A / B / C 量级给出候选名单。</p></div></div>
+      <div class="fs"><div class="idx">5</div><div class="c"><h4 data-zh="舆情巡检 + 社交情报" data-en="Monitoring + social intel">舆情巡检 + 社交情报</h4><p data-zh="四引擎快照、Subreddit 白名单、每日社媒动态 Cron 推送。" data-en="Snapshots, Subreddit whitelist, daily social Cron pushes.">四引擎快照、Subreddit 白名单、每日社媒动态 Cron 推送。</p></div></div>
+      <div class="fs"><div class="idx">6</div><div class="c"><h4 data-zh="行业观点 + 活动策划" data-en="Viewpoints + event planning">行业观点 + 活动策划</h4><p data-zh="周报 / 月报叙事补给,活动四候选方案评分融合。" data-en="Weekly/monthly narrative supply; four event candidates scored and fused.">周报 / 月报叙事补给,活动四候选方案评分融合。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 能力模块 -->
+<section class="features" id="features">
+  <div class="sec-head">
+    <div class="eyebrow" data-zh="一体化能力" data-en="One platform">一体化能力</div>
+    <h2 data-zh="AI 时代品牌公关需要的,都在一处" data-en="Everything brand PR needs, in one place">AI 时代品牌公关需要的,都在一处</h2>
+  </div>
+  <div class="wrap">
+
+    <!-- EEAT -->
+    <div class="feat">
+      <div class="feat-text">
+        <div class="feat-num" data-zh="能力 01 · 可见度诊断" data-en="01 · Visibility audit">能力 01 · 可见度诊断</div>
+        <h3 data-zh="用 EEAT 四维,量化你在 AI 里的份量" data-en="Quantify your weight in AI with EEAT">用 EEAT 四维,量化你在 AI 里的份量</h3>
+        <p data-zh="EEAT 是 AI 引擎判断该不该引用你的核心框架。从经验、专业、权威、可信四维打分,可信作为地基重点审计。" data-en="EEAT is how AI engines decide whether to cite you. We score Experience, Expertise, Authoritativeness and Trustworthiness — Trust as the foundation.">EEAT 是 AI 引擎判断该不该引用你的核心框架。从经验、专业、权威、可信四维打分,可信作为地基重点审计。</p>
+        <ul class="feat-list">
+          <li><span class="ic">✓</span><span data-zh="E-E-A-T 四维评分 + 雷达可视化" data-en="E-E-A-T four-axis scoring with radar">E-E-A-T 四维评分 + 雷达可视化</span></li>
+          <li><span class="ic">✓</span><span data-zh="JSON-LD / Wikidata 知识图谱实体对齐审计" data-en="JSON-LD / Wikidata entity-alignment audit">JSON-LD / Wikidata 知识图谱实体对齐审计</span></li>
+          <li><span class="ic">✓</span><span data-zh="单文件 HTML 仪表盘,可导出精美 PDF" data-en="Single-file dashboard, exports to PDF">单文件 HTML 仪表盘,可导出精美 PDF</span></li>
+        </ul>
+      </div>
+      <div class="hero-visual feature-visual">
+        <div class="hv-top">
+          <span class="t" data-zh="EEAT 可见度快照" data-en="EEAT visibility snapshot">EEAT 可见度快照</span>
+          <span class="live"><i></i><span data-zh="实时" data-en="Live">实时</span></span>
+        </div>
+        <div class="hv-cols">
+          <div class="score-ring" style="width:150px;height:150px">
+            <svg width="150" height="150" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#e0e0e6" stroke-width="8"/>
+              <circle id="ring" cx="60" cy="60" r="52" fill="none" stroke="var(--accent)" stroke-width="8" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" transform="rotate(-90 60 60)"/>
+            </svg>
+            <div class="v"><b style="font-size:38px">76</b><small data-zh="综合分" data-en="overall">综合分</small></div>
+          </div>
+          <div class="eeat-list">
+            <div class="eeat-item"><div class="top"><span class="lab" data-zh="Experience 经验" data-en="Experience">Experience 经验</span><span class="val">71</span></div><div class="bar"><span data-w="71"></span></div></div>
+            <div class="eeat-item"><div class="top"><span class="lab" data-zh="Expertise 专业" data-en="Expertise">Expertise 专业</span><span class="val">82</span></div><div class="bar"><span data-w="82"></span></div></div>
+            <div class="eeat-item"><div class="top"><span class="lab" data-zh="Authoritativeness 权威" data-en="Authoritativeness">Authoritativeness 权威</span><span class="val">64</span></div><div class="bar"><span data-w="64"></span></div></div>
+            <div class="eeat-item"><div class="top"><span class="lab" data-zh="Trustworthiness 可信 · 核心" data-en="Trustworthiness · core">Trustworthiness 可信 · 核心</span><span class="val">88</span></div><div class="bar"><span data-w="88"></span></div></div>
+          </div>
+        </div>
+        <div class="eeat-judgment" data-zh-html="<b>判断:</b>当前综合分 76,品牌已有较好的 AI 可见度基础。可信度最高,说明官网、资料和事实信息较稳定;权威维度偏弱,下一步应补充第三方媒体引用、行业背书和知识图谱实体对齐。" data-en-html="<b>Verdict:</b> Overall score 76 shows a solid AI visibility base. Trust is the strongest signal, while authority is the main gap. Next, add third-party citations, industry proof and entity alignment."><b>判断:</b>当前综合分 76,品牌已有较好的 AI 可见度基础。可信度最高,说明官网、资料和事实信息较稳定;权威维度偏弱,下一步应补充第三方媒体引用、行业背书和知识图谱实体对齐。</div>
+      </div>
+    </div>
+
+    <!-- 舆情 -->
+    <div class="feat rev">
+      <div class="feat-text">
+        <div class="feat-num" data-zh="能力 02 · 舆情巡检" data-en="02 · Monitoring">能力 02 · 舆情巡检</div>
+        <h3 data-zh="负面冒头那一刻,你就收到信号" data-en="Get the signal the moment risk surfaces">负面冒头那一刻,你就收到信号</h3>
+        <p data-zh="四引擎快照、Subreddit 白名单、社媒实时巡检。八种危机类型自动分类直推 Slack,含 AI 信源污染这类隐蔽风险。" data-en="Four-engine snapshots, a Subreddit whitelist and live social sweeps. Eight crisis types auto-classified to Slack — including hidden risks like AI source poisoning.">四引擎快照、Subreddit 白名单、社媒实时巡检。八种危机类型自动分类直推 Slack,含 AI 信源污染这类隐蔽风险。</p>
+        <ul class="feat-list">
+          <li><span class="ic">✓</span><span data-zh="8 种危机类型自动分类(含 AI 信源污染)" data-en="8 crisis types auto-classified (incl. AI source poisoning)">8 种危机类型自动分类(含 AI 信源污染)</span></li>
+          <li><span class="ic">✓</span><span data-zh="Subreddit 垂直白名单监控" data-en="Vertical Subreddit whitelist">Subreddit 垂直白名单监控</span></li>
+          <li><span class="ic">✓</span><span data-zh="Slack 告警卡片 + 交互按钮" data-en="Slack alert cards with action buttons">Slack 告警卡片 + 交互按钮</span></li>
+        </ul>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="ttl" data-zh="实时告警流" data-en="Live alerts">实时告警流</span><span class="tag">module_02</span></div>
+        <div class="mock-row alerts">
+        <div class="alert"><span class="sev c">CRIT</span><div class="body"><div class="msg" data-zh="AI 信源污染:Gemini 引用了错误财报数据" data-en="AI source poisoning: Gemini cited a wrong earnings figure">AI 信源污染:Gemini 引用了错误财报数据</div><div class="meta" data-zh="gemini · 四引擎扩散中 · 2 分钟前" data-en="gemini · spreading · 2m ago">gemini · 四引擎扩散中 · 2 分钟前</div></div></div>
+        <div class="alert"><span class="sev w">WARN</span><div class="body"><div class="msg" data-zh="r/investing 出现负面讨论,互动上升" data-en="Negative thread on r/investing, engagement rising">r/investing 出现负面讨论,互动上升</div><div class="meta" data-zh="subreddit · 白名单命中 · 18 分钟前" data-en="subreddit · whitelist hit · 18m ago">subreddit · 白名单命中 · 18 分钟前</div></div></div>
+        <div class="alert"><span class="sev o">OK</span><div class="body"><div class="msg" data-zh="社媒品牌提及整体情绪转正" data-en="Brand sentiment turned positive">社媒品牌提及整体情绪转正</div><div class="meta" data-zh="社媒 · 情绪 +0.3 · 1 小时前" data-en="social · sentiment +0.3 · 1h ago">社媒 · 情绪 +0.3 · 1 小时前</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KOL -->
+    <div class="feat">
+      <div class="feat-text">
+        <div class="feat-num" data-zh="能力 03 · KOL 推荐" data-en="03 · KOL outreach">能力 03 · KOL 推荐</div>
+        <h3 data-zh="从头部大 V 到纳米红人,分层推荐" data-en="From top voices to nano creators, tiered">从头部大 V 到纳米红人,分层推荐</h3>
+        <p data-zh="按量级选 A / B / C:头部权威分析师、微型高互动红人,或两者分层都要。每个候选附粉丝量级、互动率与契合度。" data-en="Pick tier A / B / C: authority analysts, high-engagement micro creators, or both. Each candidate comes with reach, engagement rate and fit.">按量级选 A / B / C:头部权威分析师、微型高互动红人,或两者分层都要。每个候选附粉丝量级、互动率与契合度。</p>
+        <ul class="feat-list">
+          <li><span class="ic">✓</span><span data-zh="A 档:10 万+粉头部权威" data-en="Tier A: 100k+ authority voices">A 档:10 万+粉头部权威</span></li>
+          <li><span class="ic">✓</span><span data-zh="B 档:1k–10 万微型红人,互动率 ≥3%" data-en="Tier B: 1k–100k micro creators, ER ≥3%">B 档:1k–10 万微型红人,互动率 ≥3%</span></li>
+          <li><span class="ic">✓</span><span data-zh="C 档:两者分层都要" data-en="Tier C: both, layered">C 档:两者分层都要</span></li>
+        </ul>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="ttl" data-zh="KOL 候选" data-en="KOL candidates">KOL 候选</span><span class="tag">module_03</span></div>
+        <div class="mock-row kol kol-demo">
+          <div class="kol-tier">
+            <button type="button" data-tier="a" data-zh="A 头部" data-en="A Top">A 头部</button>
+            <button type="button" class="act" data-tier="b" data-zh="B 微型" data-en="B Micro">B 微型</button>
+            <button type="button" data-tier="c" data-zh="C 分层" data-en="C Both">C 分层</button>
+          </div>
+          <div class="kol-list">
+            <div class="kol-panel" data-panel="a">
+              <div class="kol-item"><div class="kol-av">AW</div><div class="info"><div class="nm">@alpha_wallst</div><div class="mt" data-zh="128k 粉 · 宏观金融" data-en="128k · macro finance">128k 粉 · 宏观金融</div></div><span class="er">ER 2.1%</span></div>
+              <div class="kol-item"><div class="kol-av">VC</div><div class="info"><div class="nm">@venture_chloe</div><div class="mt" data-zh="96k 粉 · VC / 科技" data-en="96k · VC / tech">96k 粉 · VC / 科技</div></div><span class="er">ER 1.8%</span></div>
+              <div class="kol-item"><div class="kol-av">BK</div><div class="info"><div class="nm">@banking_kai</div><div class="mt" data-zh="214k 粉 · 银行与支付" data-en="214k · banking">214k 粉 · 银行与支付</div></div><span class="er">1.5%</span></div>
+            </div>
+            <div class="kol-panel act" data-panel="b">
+              <div class="kol-item"><div class="kol-av">FX</div><div class="info"><div class="nm">@fintech_xu</div><div class="mt" data-zh="3.2k 粉 · 金融科技" data-en="3.2k · fintech">3.2k 粉 · 金融科技</div></div><span class="er">ER 6.8%</span></div>
+              <div class="kol-item"><div class="kol-av">QA</div><div class="info"><div class="nm">@quant_alice</div><div class="mt" data-zh="8.7k 粉 · 量化投研" data-en="8.7k · quant">8.7k 粉 · 量化投研</div></div><span class="er">ER 4.1%</span></div>
+              <div class="kol-item"><div class="kol-av">IR</div><div class="info"><div class="nm">@ir_daily</div><div class="mt" data-zh="12k 粉 · 投资者关系" data-en="12k · IR">12k 粉 · 投资者关系</div></div><span class="er">ER 3.4%</span></div>
+            </div>
+            <div class="kol-panel" data-panel="c">
+              <div class="kol-item"><div class="kol-av">MX</div><div class="info"><div class="nm">@market_xlab</div><div class="mt" data-zh="82k 粉 · 头部扩散" data-en="82k · top reach">82k 粉 · 头部扩散</div></div><span class="er">ER 2.5%</span></div>
+              <div class="kol-item"><div class="kol-av">FI</div><div class="info"><div class="nm">@fin_insider</div><div class="mt" data-zh="18k 粉 · 深度评论" data-en="18k · analysis">18k 粉 · 深度评论</div></div><span class="er">ER 5.2%</span></div>
+              <div class="kol-item"><div class="kol-av">PM</div><div class="info"><div class="nm">@payments_mia</div><div class="mt" data-zh="6.4k 粉 · 垂直社群" data-en="6.4k · niche community">6.4k 粉 · 垂直社群</div></div><span class="er">ER 7.1%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 横纵 -->
+    <div class="feat rev">
+      <div class="feat-text">
+        <div class="feat-num" data-zh="能力 04 · 竞品横纵分析" data-en="04 · Competitive H×V">能力 04 · 竞品横纵分析</div>
+        <h3 data-zh="纵看历程,横比对手,交汇出洞察" data-en="Track the timeline, compare rivals, cross for insight">纵看历程,横比对手,交汇出洞察</h3>
+        <p data-zh="纵轴追踪品牌从诞生到当下,横轴在同一截面横比竞品,交叉产出独到判断与三剧本推演,一份 1–3 万字深度报告。" data-en="The vertical axis tracks a brand over time; the horizontal compares rivals now. The crossing yields sharp judgment and three scenarios — a 10k–30k word report.">纵轴追踪品牌从诞生到当下,横轴在同一截面横比竞品,交叉产出独到判断与三剧本推演,一份 1–3 万字深度报告。</p>
+        <ul class="feat-list">
+          <li><span class="ic">✓</span><span data-zh="纵轴 6k–15k 字 + 横轴 3k–10k 字" data-en="Vertical 6k–15k + horizontal 3k–10k words">纵轴 6k–15k 字 + 横轴 3k–10k 字</span></li>
+          <li><span class="ic">✓</span><span data-zh="A4 WeasyPrint 排版 PDF" data-en="A4 WeasyPrint-typeset PDF">A4 WeasyPrint 排版 PDF</span></li>
+          <li><span class="ic">✓</span><span data-zh="LLM_Parser_Bundle 纯文本包,供 AI 索引" data-en="LLM_Parser_Bundle plain-text pack for AI crawlers">LLM_Parser_Bundle 纯文本包,供 AI 索引</span></li>
+        </ul>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="ttl" data-zh="横纵定位图" data-en="H×V positioning">横纵定位图</span><span class="tag">module_04</span></div>
+        <div class="mock-row hv">
+          <div class="hvplot">
+            <div class="ax y"></div><div class="ax x"></div>
+            <span class="lab y" data-zh="AI 可见度 ↑" data-en="AI visibility ↑">AI 可见度 ↑</span>
+            <span class="lab x" data-zh="生态成熟度 →" data-en="Maturity →">生态成熟度 →</span>
+            <div class="node you" style="left:60%;top:24%"><span class="l" data-zh="你" data-en="You">你</span></div>
+            <div class="node a" style="left:80%;top:40%"><span class="l" data-zh="竞品 A" data-en="Rival A">竞品 A</span></div>
+            <div class="node b" style="left:38%;top:56%"><span class="l" data-zh="竞品 B" data-en="Rival B">竞品 B</span></div>
+            <div class="node c" style="left:22%;top:78%"><span class="l" data-zh="竞品 C" data-en="Rival C">竞品 C</span></div>
+          </div>
+          <div class="mock-vline"></div>
+          <div class="mock-conclusion" data-zh="交汇洞察:你在可见度领先,但生态成熟度落后竞品 A,三剧本推演已生成。" data-en="Insight: you lead on visibility but trail rival A on maturity; three scenarios generated.">交汇洞察:你在可见度领先,但生态成熟度落后竞品 A,三剧本推演已生成。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GEO 文章优化 -->
+    <div class="feat">
+      <div class="feat-text">
+        <div class="feat-num" data-zh="能力 05 · GEO 文章优化" data-en="05 · GEO article optimization">能力 05 · GEO 文章优化</div>
+        <h3 data-zh="让每篇文章,更容易被 AI 引用" data-en="Make every article easier for AI to cite">让每篇文章,更容易被 AI 引用</h3>
+        <p data-zh="按 EEAT-V 文章版评估稿件,从可信证据、结构清晰度、实体对齐和 AI 可摘录性出发,给出 P0 / P1 / P2 修改清单。" data-en="Score each article with an EEAT-V lens, then produce P0 / P1 / P2 edits across evidence, structure, entity alignment and AI-citability.">按 EEAT-V 文章版评估稿件,从可信证据、结构清晰度、实体对齐和 AI 可摘录性出发,给出 P0 / P1 / P2 修改清单。</p>
+        <ul class="feat-list">
+          <li><span class="ic">✓</span><span data-zh="单篇 / 对比 / 批量三种评估模式" data-en="Single, comparison and batch review modes">单篇 / 对比 / 批量三种评估模式</span></li>
+          <li><span class="ic">✓</span><span data-zh="每个事实主张绑定来源与日期" data-en="Each factual claim tied to source and date">每个事实主张绑定来源与日期</span></li>
+          <li><span class="ic">✓</span><span data-zh="输出可直接执行的三级修改清单" data-en="Actionable P0 / P1 / P2 edit list">输出可直接执行的三级修改清单</span></li>
+        </ul>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="ttl" data-zh="稿件优化清单" data-en="Article edit list">稿件优化清单</span><span class="tag">module_05</span></div>
+        <div class="mock-row alerts">
+          <div class="alert"><span class="sev c">P0</span><div class="body"><div class="msg" data-zh="补充数据来源,避免无出处结论" data-en="Add sources for unsupported claims">补充数据来源,避免无出处结论</div><div class="meta" data-zh="可信度 · 必改" data-en="trust · must fix">可信度 · 必改</div></div></div>
+          <div class="alert"><span class="sev w">P1</span><div class="body"><div class="msg" data-zh="重写小标题,匹配 AI 常见 query" data-en="Rewrite headings around AI queries">重写小标题,匹配 AI 常见 query</div><div class="meta" data-zh="可见度 · 显著提升" data-en="visibility · high lift">可见度 · 显著提升</div></div></div>
+          <div class="alert"><span class="sev o">P2</span><div class="body"><div class="msg" data-zh="加入 FAQ 段落,方便模型摘录" data-en="Add FAQ blocks for extraction">加入 FAQ 段落,方便模型摘录</div><div class="meta" data-zh="结构 · 锦上添花" data-en="structure · polish">结构 · 锦上添花</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 活动策划 -->
+    <div class="feat rev">
+      <div class="feat-text">
+        <div class="feat-num" data-zh="能力 06 · 活动策划" data-en="06 · Event planning">能力 06 · 活动策划</div>
+        <h3 data-zh="把活动,变成 GEO 和舆情的联动节点" data-en="Turn events into GEO and PR momentum">把活动,变成 GEO 和舆情的联动节点</h3>
+        <p data-zh="围绕发布会、沙龙、线上分享和媒体沟通生成候选方案,按逻辑、创新、可行性、传播四维评分,融合成一版可执行计划。" data-en="Generate event options across launches, salons, webinars and media moments, score them on logic, originality, feasibility and reach, then fuse one executable plan.">围绕发布会、沙龙、线上分享和媒体沟通生成候选方案,按逻辑、创新、可行性、传播四维评分,融合成一版可执行计划。</p>
+        <ul class="feat-list">
+          <li><span class="ic">✓</span><span data-zh="4 个候选方案 × 4 维评分" data-en="4 candidates × 4 scoring dimensions">4 个候选方案 × 4 维评分</span></li>
+          <li><span class="ic">✓</span><span data-zh="活动前 / 中 / 后 GEO 动作拆解" data-en="Before / during / after GEO actions">活动前 / 中 / 后 GEO 动作拆解</span></li>
+          <li><span class="ic">✓</span><span data-zh="联动舆情监测、KOL 触达与内容分发" data-en="Links monitoring, KOL outreach and content distribution">联动舆情监测、KOL 触达与内容分发</span></li>
+        </ul>
+      </div>
+      <div class="mock">
+        <div class="mock-h"><span class="ttl" data-zh="活动方案评分" data-en="Event plan scoring">活动方案评分</span><span class="tag">module_06</span></div>
+        <div class="mock-row hv">
+          <div class="eeat-mini">
+            <div class="row"><span class="k" data-zh="逻辑" data-en="Logic">逻辑</span><span class="b"><i style="width:90%"></i></span><span class="n">9.0</span></div>
+            <div class="row"><span class="k" data-zh="创新" data-en="Originality">创新</span><span class="b"><i style="width:82%"></i></span><span class="n">8.2</span></div>
+            <div class="row"><span class="k" data-zh="可行性" data-en="Feasibility">可行性</span><span class="b"><i style="width:86%"></i></span><span class="n">8.6</span></div>
+            <div class="row"><span class="k" data-zh="传播" data-en="Reach">传播</span><span class="b"><i style="width:88%"></i></span><span class="n">8.8</span></div>
+          </div>
+          <div class="mock-vline"></div>
+          <div class="mock-conclusion" data-zh="推荐方案:小型闭门沙龙 + 白皮书发布 + KOL 二次解读,活动后沉淀为 AI 可引用内容资产。" data-en="Recommended: closed salon + whitepaper release + KOL follow-up, then turn the event into AI-citable content assets.">推荐方案:小型闭门沙龙 + 白皮书发布 + KOL 二次解读,活动后沉淀为 AI 可引用内容资产。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Social media 接入 -->
+<section class="xaccess" id="xaccess">
+  <div class="sec-head">
+    <div class="eyebrow" data-zh="社媒接入" data-en="Social media">社媒接入</div>
+    <h2 data-zh="用你自己的账号采集社媒" data-en="Collect social with your own account">用你自己的账号采集社媒</h2>
+    <p data-zh="社媒情报由你的账号登录态驱动,可触达公开 API 拿不到的内容。" data-en="Social intelligence runs on your own logged-in session, reaching content public APIs can't.">社媒情报由你的账号登录态驱动,可触达公开 API 拿不到的内容。</p>
+  </div>
+  <div class="wrap">
+    <div class="x-grid">
+      <div class="x-card login">
+        <span class="badge" data-zh="登录态接入" data-en="Logged-in session">登录态接入</span>
+        <h3 data-zh="提供账号,本地登录" data-en="Sign in, locally">提供账号,本地登录</h3>
+        <p data-zh="账号登录后采集公开 API 覆盖不到的社媒内容。" data-en="Collect social content beyond public API coverage after sign-in.">账号登录后采集公开 API 覆盖不到的社媒内容。</p>
+        <div class="x-field"><span data-zh="账号登录 / Cookie 导入" data-en="Sign in / import cookies">账号登录 / Cookie 导入</span><span class="lk" data-zh="连接 ›" data-en="Connect ›">连接 ›</span></div>
+        <div class="x-field"><span>profile = "user"</span><span style="color:var(--green)" data-zh="已连接" data-en="connected">已连接</span></div>
+        <ul class="x-pros">
+          <li><span class="i g">✓</span><span data-zh="覆盖高级搜索与非公开内容" data-en="Covers advanced search & non-public content">覆盖高级搜索与非公开内容</span></li>
+          <li><span class="i g">✓</span><span data-zh="无需开发者账号" data-en="No developer account needed">无需开发者账号</span></li>
+          <li><span class="i g">✓</span><span data-zh="凭证本地加密,绝不上传明文" data-en="Credentials encrypted locally, never uploaded">凭证本地加密,绝不上传明文</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 档位 -->
+<section id="tiers">
+  <div class="sec-head">
+    <div class="eyebrow" data-zh="交付档位" data-en="Plans">交付档位</div>
+    <h2 data-zh="按需求选交付介质" data-en="Pick the deliverable that fits">按需求选交付介质</h2>
+  </div>
+  <div class="wrap">
+    <div class="tiers-grid">
+      <div class="tier">
+        <div class="tier-head">
+          <h3 data-zh="诊断版" data-en="Diagnosis">诊断版</h3>
+          <div class="price-ref" data-zh-html="市场参考价<br>¥9,800/年" data-en-html="Market reference<br>¥9,800/year">市场参考价<br>¥9,800/年</div>
+        </div>
+        <p class="sub" data-zh="一次性摸清家底,先看现状" data-en="A one-off snapshot of where you stand">一次性摸清家底,先看现状</p>
+        <div class="medium" data-zh="交付:单文件 HTML 仪表盘" data-en="Single-file HTML dashboard">交付:单文件 HTML 仪表盘</div>
+        <ul>
+          <li><span class="ic">✓</span><span data-zh="EEAT 雷达图" data-en="EEAT radar">EEAT 雷达图</span></li>
+          <li><span class="ic">✓</span><span data-zh="四引擎占位快照" data-en="Four-engine snapshot">四引擎占位快照</span></li>
+          <li><span class="ic">✓</span><span data-zh="体检结论与红黄灯" data-en="Health verdict with signals">体检结论与红黄灯</span></li>
+        </ul>
+      </div>
+      <div class="tier hot">
+        <span class="pop" data-zh="最常用" data-en="Most picked">最常用</span>
+        <div class="tier-head">
+          <h3 data-zh="策略版" data-en="Strategy">策略版</h3>
+          <div class="price-ref" data-zh-html="市场参考价<br>¥21,800/年" data-en-html="Market reference<br>¥21,800/year">市场参考价<br>¥21,800/年</div>
+        </div>
+        <p class="sub" data-zh="拿到诊断,更要拿到怎么做" data-en="Diagnosis plus a plan to act on">拿到诊断,更要拿到怎么做</p>
+        <div class="medium" data-zh="交付:仪表盘 + Markdown 策略包" data-en="Dashboard + Markdown strategy pack">交付:仪表盘 + Markdown 策略包</div>
+        <ul>
+          <li><span class="ic">✓</span><span data-zh="诊断版全部内容" data-en="Everything in Diagnosis">诊断版全部内容</span></li>
+          <li><span class="ic">✓</span><span data-zh="完整 GEO/SEO 策略包" data-en="Full GEO/SEO strategy pack">完整 GEO/SEO 策略包</span></li>
+          <li><span class="ic">✓</span><span data-zh="竞品横纵分析 PDF" data-en="Competitive H×V PDF">竞品横纵分析 PDF</span></li>
+          <li><span class="ic">✓</span><span data-zh="KOL 分层名单" data-en="Tiered KOL list">KOL 分层名单</span></li>
+        </ul>
+      </div>
+      <div class="tier">
+        <div class="tier-head">
+          <h3 data-zh="增长监测版" data-en="Growth monitor">增长监测版</h3>
+          <div class="price-ref" data-zh-html="市场参考价<br>¥29,800/季度" data-en-html="Market reference<br>¥29,800/quarter">市场参考价<br>¥29,800/季度</div>
+        </div>
+        <p class="sub" data-zh="持续盯盘,周期性出片" data-en="Always-on tracking, periodic reports">持续盯盘,周期性出片</p>
+        <div class="medium" data-zh="交付:动态仪表盘 + 周期 PDF" data-en="Live dashboard + periodic PDF">交付:动态仪表盘 + 周期 PDF</div>
+        <ul>
+          <li><span class="ic">✓</span><span data-zh="策略版全部内容" data-en="Everything in Strategy">策略版全部内容</span></li>
+          <li><span class="ic">✓</span><span data-zh="动态 HTML 仪表盘链接" data-en="Live dashboard link">动态 HTML 仪表盘链接</span></li>
+          <li><span class="ic">✓</span><span data-zh="舆情告警直推 Slack" data-en="Alerts pushed to Slack">舆情告警直推 Slack</span></li>
+          <li><span class="ic">✓</span><span data-zh="每日社媒动态 + 周期精美 PDF" data-en="Daily social feed + periodic PDF">每日社媒动态 + 周期精美 PDF</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="background:var(--bg-soft)">
+  <div class="sec-head">
+    <div class="eyebrow">FAQ</div>
+    <h2 data-zh="还在犹豫的几个问题" data-en="Questions you might have">还在犹豫的几个问题</h2>
+  </div>
+  <div class="wrap-narrow faq-list">
+    <div class="faq-item"><button class="faq-q"><span data-zh="什么是 GEO?和 SEO 有什么区别?" data-en="What is GEO, vs SEO?">什么是 GEO?和 SEO 有什么区别?</span><span class="pm">+</span></button><div class="faq-a"><p data-zh="GEO(生成式引擎优化)是让品牌出现在 ChatGPT、Perplexity、Gemini 等 AI 给出的答案里。SEO 优化网页搜索排名,GEO 优化 AI 是否提到你、怎么提你、引用了哪些信源。" data-en="GEO (Generative Engine Optimization) gets your brand into the answers AI tools generate. SEO targets web rankings; GEO targets whether AI mentions you, how, and which sources it cites.">GEO(生成式引擎优化)是让品牌出现在 ChatGPT、Perplexity、Gemini 等 AI 给出的答案里。SEO 优化网页搜索排名,GEO 优化 AI 是否提到你、怎么提你、引用了哪些信源。</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span data-zh="EEAT 是什么?为什么用它评估?" data-en="What is EEAT, and why use it?">EEAT 是什么?为什么用它评估?</span><span class="pm">+</span></button><div class="faq-a"><p data-zh="EEAT 是 Experience(经验)、Expertise(专业)、Authoritativeness(权威)、Trustworthiness(可信),源自 Google 质量评估框架,其中可信是地基。它如今同时影响 SEO 排名和 AI 引擎是否引用你,所以是 GEO 诊断最贴切的尺子。" data-en="EEAT stands for Experience, Expertise, Authoritativeness and Trustworthiness — from Google's quality framework, with Trust as the foundation. It now shapes both SEO rankings and whether AI engines cite you, making it the right yardstick for GEO.">EEAT 是 Experience(经验)、Expertise(专业)、Authoritativeness(权威)、Trustworthiness(可信),源自 Google 质量评估框架,其中可信是地基。它如今同时影响 SEO 排名和 AI 引擎是否引用你,所以是 GEO 诊断最贴切的尺子。</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span data-zh="到底能帮我省多少?" data-en="How much does it really save?">到底能帮我省多少?</span><span class="pm">+</span></button><div class="faq-a"><p data-zh="过去一次完整的品牌 GEO 体检要多人手动搜索、截图、做表、写报告,耗时数天;现在四引擎快照、竞品分析、KOL 名单大多自动产出,人力投入显著下降,出片从数天压到数小时,团队精力转向判断与决策。具体节省取决于你的品牌数量与监测频率。" data-en="A full brand GEO audit used to take several people manually searching, screenshotting and writing for days. Now snapshots, competitive analysis and KOL lists are mostly auto-generated — labor drops sharply and turnaround goes from days to hours, freeing the team for judgment. Actual savings depend on your brand count and monitoring cadence.">过去一次完整的品牌 GEO 体检要多人手动搜索、截图、做表、写报告,耗时数天;现在四引擎快照、竞品分析、KOL 名单大多自动产出,人力投入显著下降,出片从数天压到数小时,团队精力转向判断与决策。具体节省取决于你的品牌数量与监测频率。</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span data-zh="社媒为什么要用我自己的账号?" data-en="Why use my own social account?">社媒为什么要用我自己的账号?</span><span class="pm">+</span></button><div class="faq-a"><p data-zh="社媒平台对数据访问有严格限制。用你自己的账号登录态采集,既能合规拿到权限内的数据,也避免共享账号的封禁与隐私风险。凭证本地加密,绝不上传明文。" data-en="Social platforms strictly limit data access. Using your own logged-in session keeps it within your permissions and avoids the ban and privacy risks of shared accounts. Credentials stay encrypted locally, never uploaded.">社媒平台对数据访问有严格限制。用你自己的账号登录态采集,既能合规拿到权限内的数据,也避免共享账号的封禁与隐私风险。凭证本地加密,绝不上传明文。</p></div></div>
+    <div class="faq-item"><button class="faq-q"><span data-zh="支持哪些 AI 引擎?" data-en="Which engines are supported?">支持哪些 AI 引擎?</span><span class="pm">+</span></button><div class="faq-a"><p data-zh="核心覆盖 Perplexity、ChatGPT、SearchGPT、Gemini 四引擎占位快照,并支持 Claude、Google AI Overview。新引擎会持续接入。" data-en="Core coverage is the four-engine snapshot of Perplexity, ChatGPT, SearchGPT and Gemini, plus Claude and Google AI Overview. New engines are added over time.">核心覆盖 Perplexity、ChatGPT、SearchGPT、Gemini 四引擎占位快照,并支持 Claude、Google AI Overview。新引擎会持续接入。</p></div></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <h2 data-zh="让 AI 在回答里,记住你的品牌" data-en="Make AI remember your brand">让 AI 在回答里,记住你的品牌</h2>
+    <div class="hero-cta">
+      <button class="btn btn-primary lg" data-zh="免费跑一次体检" data-en="Run a free audit">免费跑一次体检</button>
+      <button class="btn btn-text lg" data-zh="预约演示 ›" data-en="Get a demo ›">预约演示 ›</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <span class="brand" style="font-size:16px">财关助手</span>
+      <div class="foot-links">
+        <a href="#value" data-zh="降本增效" data-en="Value">降本增效</a>
+        <a href="#features" data-zh="能力" data-en="Features">能力</a>
+        <a href="#xaccess" data-zh="社媒" data-en="Social">社媒</a>
+        <a href="#tiers" data-zh="交付" data-en="Plans">交付</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 财关助手 · GEO Intelligence</span>
+      <span>brand-pr-geo-intelligence v5</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+const hdr=document.getElementById('hdr');
+addEventListener('scroll',()=>hdr.classList.toggle('scrolled',scrollY>10));
+
+document.querySelectorAll('.faq-item').forEach(it=>{
+  it.querySelector('.faq-q').addEventListener('click',()=>it.classList.toggle('open'));
+});
+
+// 引擎词轮播
+const engines=['Perplexity','ChatGPT','SearchGPT','Gemini','Claude'];
+let ei=0;
+function ew(){return document.getElementById('engineWord');}
+setInterval(()=>{const e=ew();if(!e)return;ei=(ei+1)%engines.length;
+  e.style.opacity=0;setTimeout(()=>{e.textContent=engines[ei];e.style.opacity=1;},250);},2400);
+
+// 入场动画
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+  document.querySelectorAll('.eeat-item .bar span').forEach(b=>b.style.width=b.dataset.w+'%');
+  const r=document.getElementById('ring');if(r)r.style.strokeDashoffset='78';
+  io.disconnect();
+}})},{threshold:.25});
+const hv=document.querySelector('.hero-visual');if(hv)io.observe(hv);
+const ring=document.getElementById('ring');if(ring)ring.style.transition='stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)';
+
+// KOL 分层演示
+document.querySelectorAll('.kol-demo .kol-tier button').forEach(btn=>{
+  const show=()=>{
+    const demo=btn.closest('.kol-demo');
+    const tier=btn.dataset.tier;
+    demo.querySelectorAll('.kol-tier button').forEach(b=>b.classList.toggle('act',b===btn));
+    demo.querySelectorAll('.kol-panel').forEach(p=>p.classList.toggle('act',p.dataset.panel===tier));
+  };
+  btn.addEventListener('mouseenter',show);
+  btn.addEventListener('focus',show);
+});
+
+// 中英
+let lang='zh';
+const lb=document.getElementById('lang');
+function applyLang(){
+  document.documentElement.lang=lang;
+  lb.textContent= lang==='zh'?'EN':'中';
+  document.querySelectorAll('[data-zh]').forEach(el=>{const v=el.getAttribute('data-'+lang);if(v!=null)el.textContent=v;});
+  document.querySelectorAll('[data-zh-html]').forEach(el=>{const v=el.getAttribute('data-'+lang+'-html');if(v!=null)el.innerHTML=v;});
+}
+lb.addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';applyLang();});
+
+document.getElementById('mtoggle').addEventListener('click',()=>{
+  document.getElementById('features').scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>
