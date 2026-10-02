@@ -253,6 +253,37 @@ h2{font-size:clamp(32px,5vw,48px);margin-bottom:18px}
 .tier li{display:flex;gap:10px;font-size:14.5px;color:var(--ink);align-items:flex-start}
 .tier li .ic{color:var(--accent);flex-shrink:0;margin-top:2px}
 
+/* ---------- 免费试用 ---------- */
+.trial{background:var(--bg-soft)}
+.trial-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px;align-items:start}
+.trial-copy{padding:8px 0}
+.trial-copy h3{font-size:clamp(26px,3.5vw,36px);margin-bottom:16px;line-height:1.15}
+.trial-copy p{font-size:17px;color:var(--ink-2);line-height:1.55;margin-bottom:24px}
+.trial-flow{list-style:none;display:flex;flex-direction:column;gap:14px;margin-top:22px}
+.trial-flow li{display:flex;gap:13px;align-items:flex-start;color:var(--ink);font-size:15px}
+.trial-flow b{width:28px;height:28px;border-radius:50%;background:#fff;color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.trial-form{background:#fff;border-radius:22px;padding:28px;box-shadow:0 24px 60px -42px rgba(0,0,0,.32)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;color:var(--ink-2);font-weight:500}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px 13px;font:inherit;font-size:14px;color:var(--ink);background:#fff;outline:none;transition:.18s}
+.field textarea{min-height:96px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.trial-checks{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+.check-pill{display:flex;gap:9px;align-items:center;background:var(--bg-soft);border-radius:12px;padding:11px 12px;font-size:13px;color:var(--ink-2);line-height:1.35;min-height:44px}
+.check-pill input{width:16px!important;height:16px!important;margin:1px 0 0;padding:0;border-radius:4px;accent-color:var(--accent);flex:0 0 auto}
+.check-pill span{min-width:0;overflow-wrap:anywhere}
+.trial-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:18px}
+.trial-hint{font-size:12.5px;color:var(--ink-3);line-height:1.45}
+.trial-result{display:none;margin-top:18px;padding:16px;border-radius:14px;background:#eef5ff;border:1px solid #d6e8ff;color:var(--ink);font-size:13.5px;line-height:1.55;white-space:pre-wrap}
+.trial-result.show{display:block}
+.sample-card{margin-top:26px;background:#fff;border-radius:18px;padding:22px;border:1px solid var(--line)}
+.sample-card .tag{font-size:12px;color:var(--accent);font-weight:600;margin-bottom:10px}
+.sample-card ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.sample-card li{font-size:14px;color:var(--ink-2);display:flex;gap:9px}
+.sample-card li span:first-child{color:var(--accent)}
+
 /* ---------- FAQ ---------- */
 .faq-list{max-width:720px;margin:0 auto}
 .faq-item{border-bottom:1px solid var(--line)}
@@ -283,7 +314,7 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
 @media(max-width:860px){
   .nav-links{display:none}
   .menu-toggle{display:block}
-  .hv-cols,.metrics,.compare,.x-grid,.tiers-grid{grid-template-columns:1fr}
+  .hv-cols,.metrics,.compare,.x-grid,.tiers-grid,.trial-grid,.form-grid,.trial-checks{grid-template-columns:1fr}
   .feat{gap:24px;margin-bottom:64px}
   /* mock 横向容器在窄屏改单列堆叠 */
   .mock-row.eeat,.mock-row.alerts,.mock-row.kol,.mock-row.hv{grid-template-columns:1fr;gap:20px}
@@ -298,6 +329,8 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
 @media(max-width:520px){
   .wrap,.wrap-narrow{padding:0 22px}
   .hero-cta{flex-direction:column;gap:18px}
+  .trial-form{padding:22px}
+  .trial-actions .btn{width:100%}
   .mock-row.alerts{grid-template-columns:1fr}
 }
 /* ===== 单行优化覆盖(桌面端尽量不折行)===== */
@@ -315,6 +348,7 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
   .feat-text p,
   .x-card p,
   .fs .c p,
+  .trial-copy p,
   .faq-q > span:first-child{
     white-space:nowrap;
   }
@@ -322,6 +356,7 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
   .compare-card li > span:last-child,
   .x-pros li > span:last-child,
   .feat-list li > span:last-child,
+  .sample-card li span:last-child,
   .tier li > span:last-child{
     white-space:nowrap;
   }
@@ -334,10 +369,12 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
   .faq-q{font-size:17px}
   /* 指标数字:缩小并单行 */
   .metric .num{font-size:clamp(36px,4.2vw,52px);white-space:nowrap}
+  .trial .sec-head p,.trial-copy p{white-space:normal}
 }
 /* 手机端:一律恢复正常折行,避免溢出 */
 @media(max-width:860px){
   .hero .sub,.sec-head p,.feat-text p,.x-card p,.fs .c p,
+  .trial-copy p,.sample-card li span:last-child,
   .compare-card li,.x-pros li,.feat-list li,.tier li,
   .tier .sub,.faq-q > span:first-child{white-space:normal}
 }
@@ -352,12 +389,13 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
       <a href="#value" data-zh="价值" data-en="Value">价值</a>
       <a href="#features" data-zh="能力" data-en="Features">能力</a>
       <a href="#xaccess" data-zh="社媒" data-en="Social">社媒</a>
+      <a href="#trial" data-zh="试用" data-en="Trial">试用</a>
       <a href="#tiers" data-zh="交付" data-en="Plans">交付</a>
       <a href="#faq">FAQ</a>
     </div>
     <div class="nav-right">
       <button class="lang" id="lang">EN</button>
-      <a class="nav-mini" data-zh="预约演示" data-en="Get a demo">预约演示</a>
+      <a href="#trial" class="nav-mini" data-zh="预约演示" data-en="Get a demo">预约演示</a>
     </div>
     <button class="menu-toggle" id="mtoggle" aria-label="menu">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
@@ -370,8 +408,8 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
   <div class="wrap">
     <h1 data-zh-html="让 <span class='grad' id='engineWord'>Perplexity</span><br>在答案里记住你" data-en-html="Make <span class='grad' id='engineWord'>Perplexity</span><br>remember your brand">让 <span class="grad" id="engineWord">Perplexity</span><br>在答案里记住你</h1>
     <div class="hero-cta">
-      <button class="btn btn-primary lg" data-zh="免费跑一次体检" data-en="Run a free audit">免费跑一次体检</button>
-      <button class="btn btn-text lg" data-zh="看仪表盘演示 ›" data-en="See the dashboard ›">看仪表盘演示 ›</button>
+      <a href="#trial" class="btn btn-primary lg" data-zh="免费跑一次体检" data-en="Run a free audit">免费跑一次体检</a>
+      <a href="#features" class="btn btn-text lg" data-zh="看仪表盘演示 ›" data-en="See the dashboard ›">看仪表盘演示 ›</a>
     </div>
     <p class="hero-note" data-zh="诊断版报告免费 · 无需绑卡" data-en="Free diagnosis report · no card required">诊断版报告免费 · 无需绑卡</p>
 
@@ -713,6 +751,88 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
   </div>
 </section>
 
+<!-- 免费试用 -->
+<section class="trial" id="trial">
+  <div class="sec-head">
+    <div class="eyebrow" data-zh="免费试用" data-en="Free trial">免费试用</div>
+    <h2 data-zh="免费跑一次GEO体检" data-en="Run a free GEO audit">免费跑一次GEO体检</h2>
+  </div>
+  <div class="wrap">
+    <div class="trial-grid">
+      <div class="trial-copy">
+        <h3 data-zh="不用懂 GEO,填完就能开始" data-en="No GEO knowledge needed">不用懂 GEO,填完就能开始</h3>
+        <ul class="trial-flow">
+          <li><b>1</b><span data-zh="填官网、产品和联系方式" data-en="Add website, product and contact">填官网、产品和联系方式</span></li>
+          <li><b>2</b><span data-zh="选择想检查的 AI 平台" data-en="Choose AI platforms to check">选择想检查的 AI 平台</span></li>
+          <li><b>3</b><span data-zh="我们查看 AI 是否提到你和竞品" data-en="We check whether AI mentions you and rivals">我们查看 AI 是否提到你和竞品</span></li>
+          <li><b>4</b><span data-zh="给你一份免费诊断和优先修改建议" data-en="You receive a free diagnosis and priority fixes">给你一份免费诊断和优先修改建议</span></li>
+        </ul>
+        <div class="sample-card">
+          <div class="tag" data-zh="免费诊断会告诉你" data-en="The free check tells you">免费诊断会告诉你</div>
+          <ul>
+            <li><span>✓</span><span data-zh="AI 搜索里有没有出现你的品牌" data-en="Whether AI search mentions your brand">AI 搜索里有没有出现你的品牌</span></li>
+            <li><span>✓</span><span data-zh="AI 更常引用你还是引用竞品" data-en="Whether AI cites you or your competitors more">AI 更常引用你还是引用竞品</span></li>
+            <li><span>✓</span><span data-zh="官网最该先补的 3 个信息缺口" data-en="The first three information gaps to fix">官网最该先补的 3 个信息缺口</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <form class="trial-form" id="trialForm" data-endpoint="">
+        <div class="form-grid">
+          <div class="field full">
+            <label for="siteUrl" data-zh="公司官网" data-en="Company website">公司官网</label>
+            <input id="siteUrl" name="siteUrl" type="url" placeholder="https://example.com" required>
+          </div>
+          <div class="field">
+            <label for="brandName" data-zh="品牌或公司名" data-en="Brand or company">品牌或公司名</label>
+            <input id="brandName" name="brandName" type="text" placeholder="例如:财关助手" required data-placeholder-zh="例如:财关助手" data-placeholder-en="e.g. Acme AI">
+          </div>
+          <div class="field">
+            <label for="industry" data-zh="行业" data-en="Industry">行业</label>
+            <input id="industry" name="industry" type="text" placeholder="例如:金融科技 / 消费电子" data-placeholder-zh="例如:金融科技 / 消费电子" data-placeholder-en="e.g. fintech / consumer electronics">
+          </div>
+          <div class="field">
+            <label for="product" data-zh="主要产品/服务" data-en="Main product / service">主要产品/服务</label>
+            <input id="product" name="product" type="text" placeholder="例如:AI 舆情监测工具" data-placeholder-zh="例如:AI 舆情监测工具" data-placeholder-en="e.g. AI monitoring tool">
+          </div>
+          <div class="field">
+            <label for="market" data-zh="主要市场" data-en="Main market">主要市场</label>
+            <input id="market" name="market" type="text" placeholder="例如:中国 / 北美 / 东南亚" data-placeholder-zh="例如:中国 / 北美 / 东南亚" data-placeholder-en="e.g. China / North America / SEA">
+          </div>
+          <div class="field">
+            <label for="contact" data-zh="怎么联系你" data-en="How to reach you">怎么联系你</label>
+            <input id="contact" name="contact" type="text" placeholder="邮箱、微信或手机号" required data-placeholder-zh="邮箱、微信或手机号" data-placeholder-en="Email, WeChat or phone">
+          </div>
+          <div class="field">
+            <label for="competitors" data-zh="想对比的竞品" data-en="Competitors to compare">想对比的竞品</label>
+            <input id="competitors" name="competitors" type="text" placeholder="选填,可写 1-3 个" data-placeholder-zh="选填,可写 1-3 个" data-placeholder-en="Optional, add 1-3 names">
+          </div>
+          <div class="field full">
+            <label data-zh="你最想检查哪些 AI 平台" data-en="Which AI platforms should we check">你最想检查哪些 AI 平台</label>
+            <div class="trial-checks">
+              <label class="check-pill"><input type="checkbox" name="platforms" value="ChatGPT" checked><span>ChatGPT</span></label>
+              <label class="check-pill"><input type="checkbox" name="platforms" value="Perplexity" checked><span>Perplexity</span></label>
+              <label class="check-pill"><input type="checkbox" name="platforms" value="Gemini"><span>Gemini</span></label>
+              <label class="check-pill"><input type="checkbox" name="platforms" value="Google AI Overview"><span>Google AI Overview</span></label>
+              <label class="check-pill"><input type="checkbox" name="platforms" value="X / Twitter"><span>X / Twitter</span></label>
+              <label class="check-pill"><input type="checkbox" name="platforms" value="Reddit"><span>Reddit</span></label>
+            </div>
+          </div>
+          <div class="field full">
+            <label for="goal" data-zh="你最想知道什么" data-en="What do you want to know most">你最想知道什么</label>
+            <textarea id="goal" name="goal" placeholder="例如:为什么 AI 不推荐我们?官网哪里需要补资料?竞品为什么总被提到?" data-placeholder-zh="例如:为什么 AI 不推荐我们?官网哪里需要补资料?竞品为什么总被提到?" data-placeholder-en="e.g. Why does AI not recommend us? What should our website add? Why do rivals appear more?"></textarea>
+          </div>
+        </div>
+        <div class="trial-actions">
+          <button class="btn btn-primary lg" type="submit" data-zh="提交免费诊断" data-en="Request free check">提交免费诊断</button>
+          <span class="trial-hint" data-zh="信息越完整,诊断越准确。不会公开你的联系方式。" data-en="The more context you add, the better the diagnosis. Your contact will not be published.">信息越完整,诊断越准确。不会公开你的联系方式。</span>
+        </div>
+        <div class="trial-result" id="trialResult" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
 <!-- FAQ -->
 <section id="faq" style="background:var(--bg-soft)">
   <div class="sec-head">
@@ -733,8 +853,8 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
   <div class="wrap">
     <h2 data-zh="让 AI 在回答里,记住你的品牌" data-en="Make AI remember your brand">让 AI 在回答里,记住你的品牌</h2>
     <div class="hero-cta">
-      <button class="btn btn-primary lg" data-zh="免费跑一次体检" data-en="Run a free audit">免费跑一次体检</button>
-      <button class="btn btn-text lg" data-zh="预约演示 ›" data-en="Get a demo ›">预约演示 ›</button>
+      <a href="#trial" class="btn btn-primary lg" data-zh="免费跑一次体检" data-en="Run a free audit">免费跑一次体检</a>
+      <a href="#trial" class="btn btn-text lg" data-zh="预约演示 ›" data-en="Get a demo ›">预约演示 ›</a>
     </div>
   </div>
 </section>
@@ -747,6 +867,7 @@ footer{background:var(--bg-soft);padding:44px 0 30px;font-size:12px;color:var(--
         <a href="#value" data-zh="降本增效" data-en="Value">降本增效</a>
         <a href="#features" data-zh="能力" data-en="Features">能力</a>
         <a href="#xaccess" data-zh="社媒" data-en="Social">社媒</a>
+        <a href="#trial" data-zh="试用" data-en="Trial">试用</a>
         <a href="#tiers" data-zh="交付" data-en="Plans">交付</a>
         <a href="#faq">FAQ</a>
       </div>
@@ -802,11 +923,71 @@ function applyLang(){
   lb.textContent= lang==='zh'?'EN':'中';
   document.querySelectorAll('[data-zh]').forEach(el=>{const v=el.getAttribute('data-'+lang);if(v!=null)el.textContent=v;});
   document.querySelectorAll('[data-zh-html]').forEach(el=>{const v=el.getAttribute('data-'+lang+'-html');if(v!=null)el.innerHTML=v;});
+  document.querySelectorAll('[data-placeholder-zh]').forEach(el=>{const v=el.getAttribute('data-placeholder-'+lang);if(v!=null)el.setAttribute('placeholder',v);});
 }
 lb.addEventListener('click',()=>{lang=lang==='zh'?'en':'zh';applyLang();});
 
+// 免费试用表单:有 endpoint 时提交到后台;没有时生成摘要并复制
+const trialForm=document.getElementById('trialForm');
+const trialResult=document.getElementById('trialResult');
+function trialText(data){
+  const platforms=data.platforms.length?data.platforms.join(', '):'未选择';
+  return [
+    'AI 品牌可见度免费诊断申请',
+    `公司官网: ${data.siteUrl}`,
+    `品牌或公司名: ${data.brandName}`,
+    `行业: ${data.industry || '未填写'}`,
+    `主要产品/服务: ${data.product || '未填写'}`,
+    `主要市场: ${data.market || '未填写'}`,
+    `联系方式: ${data.contact}`,
+    `想对比的竞品: ${data.competitors || '未填写'}`,
+    `想检查的 AI 平台: ${platforms}`,
+    `最想知道的问题: ${data.goal || '未填写'}`,
+    '',
+    '建议下一步: 先做免费诊断,看 AI 是否提到该品牌、是否更常推荐竞品,再给出 3 条优先修改建议。'
+  ].join('\n');
+}
+async function copyText(text){
+  if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(text);return true;}
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+  const ok=document.execCommand('copy');document.body.removeChild(ta);return ok;
+}
+if(trialForm){
+  trialForm.addEventListener('submit',async(e)=>{
+    e.preventDefault();
+    const fd=new FormData(trialForm);
+    const data={
+      siteUrl:fd.get('siteUrl')?.trim() || '',
+      brandName:fd.get('brandName')?.trim() || '',
+      industry:fd.get('industry')?.trim() || '',
+      product:fd.get('product')?.trim() || '',
+      market:fd.get('market')?.trim() || '',
+      contact:fd.get('contact')?.trim() || '',
+      competitors:fd.get('competitors')?.trim() || '',
+      goal:fd.get('goal')?.trim() || '',
+      platforms:fd.getAll('platforms')
+    };
+    const summary=trialText(data);
+    const endpoint=trialForm.dataset.endpoint;
+    let ok=false;
+    if(endpoint){
+      try{
+        const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        ok=res.ok;
+      }catch(_){ok=false;}
+    }
+    if(!ok){ok=await copyText(summary);}
+    trialResult.classList.add('show');
+    trialResult.textContent=(lang==='zh'
+      ? (ok?'已整理好申请信息,并复制到剪贴板。你可以把这段内容发给我们,我们会据此准备免费诊断。\n\n':'已整理好申请信息,请复制下面内容发给我们。\n\n')
+      : (ok?'Your request has been prepared and copied. Send it to us and we will prepare the free check.\n\n':'Your request has been prepared. Please copy the text below and send it to us.\n\n')
+    )+summary;
+  });
+}
+
 document.getElementById('mtoggle').addEventListener('click',()=>{
-  document.getElementById('features').scrollIntoView({behavior:'smooth'});
+  document.getElementById('trial').scrollIntoView({behavior:'smooth'});
 });
 </script>
 </body>
